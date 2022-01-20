@@ -88,9 +88,9 @@ class MainActivity : AppCompatActivity() {
                  * 2           裁剪框的形状，1为正方形，2为圆形
                  * REQUEST_CODE_PICK_IMAGE 当前为相册裁剪    相机传REQUEST_CODE_CAPTURE_CAMEIA
                  */
-                Smallphoto(this,imageUri,pictureFile,pictureFile,2,REQUEST_CODE_PICK_IMAGE)
+                Smallphoto(this,imageUri,pictureFile,pictureFile,1,REQUEST_CODE_PICK_IMAGE)
             } else if (requestCode == REQUEST_CODE_CAPTURE_CAMEIA) {//相机
-                Smallphoto(this,userImageUri,pictureFile,pictureFile,2,REQUEST_CODE_CAPTURE_CAMEIA)
+                Smallphoto(this,userImageUri,pictureFile,pictureFile,1,REQUEST_CODE_CAPTURE_CAMEIA)
             } else if (requestCode == REQUEST_CROP) {
                 //使用glide进行图片的加载
                 Glide.with(this)
