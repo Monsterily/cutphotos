@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.monsterily.cutphoto">
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Cutphoto">
+        <activity android:name="com.monsterily.cutphoto.crop.CircleCropImageActivity" />
+        <activity android:name="com.monsterily.cutphoto.crop.CropImageActivity" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.monsterily.common.cutphoto.crop"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+
+</manifest>
