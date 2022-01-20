@@ -42,3 +42,6 @@ Crop.camera(Activity activity)
                 }  
 ![Image text](https://github.com/Monsterily/cutphotos/blob/master/image/ca.jpg)  
 ![Image text](https://github.com/Monsterily/cutphotos/blob/master/image/ca2.jpg)  
+特别提醒： 
+如果使用圆形裁剪，请调用方法将图片保存为圆形  
+Crop.getCircleBitmap（Bitmap bitmap）  
