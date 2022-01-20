@@ -81,10 +81,18 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 //将获得的图片uri进行压缩再裁剪，不然图片像素过大，可能会出现错误
+                /**
+                 * imageUri 相册图片的路径
+                 * pictureFile 复制一份图片进行操作，避免对原图片造成影响
+                 * pictureFile 图片压缩生成的路径
+                 * 2           裁剪框的形状，1为正方形，2为圆形
+                 * REQUEST_CODE_PICK_IMAGE 当前为相册裁剪    相机传REQUEST_CODE_CAPTURE_CAMEIA
+                 */
                 Smallphoto(this,imageUri,pictureFile,pictureFile,2,REQUEST_CODE_PICK_IMAGE)
             } else if (requestCode == REQUEST_CODE_CAPTURE_CAMEIA) {//相机
                 Smallphoto(this,userImageUri,pictureFile,pictureFile,2,REQUEST_CODE_CAPTURE_CAMEIA)
             } else if (requestCode == REQUEST_CROP) {
+                //使用glide进行图片的加载
                 Glide.with(this)
                     .load(getCircleBitmap(BitmapFactory.decodeFile(pictureFile.toString())))
                     .skipMemoryCache(true)
