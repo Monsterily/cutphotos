@@ -1,7 +1,20 @@
 # cutphotos
 感谢博主  
 https://www.jb51.net/article/144717.htm  
-https://github.com/shengge/android-crop  
+https://github.com/shengge/android-crop 
+
+添加依赖
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  
+	dependencies {
+	        implementation 'com.github.Monsterily:cutphotos:1.0'
+	}
+
 打开相册选择图片  
 Crop.album(Activity activity)  
 在onActivityResult生命周期里面进行裁剪  
@@ -26,7 +39,9 @@ Crop.album(Activity activity)
                  */  
                 Smallphoto(this,imageUri,pictureFile,pictureFile,1,REQUEST_CODE_PICK_IMAGE)  
 ![Image text](https://github.com/Monsterily/cutphotos/blob/master/image/ab.jpg)  
-![Image text](https://github.com/Monsterily/cutphotos/blob/master/image/ab2.jpg)  
+![Image text](https://github.com/Monsterily/cutphotos/blob/master/image/ab2.jpg) 
+
+
 打开相机选择图片  
 Crop.camera(Activity activity)  
 在onActivityResult生命周期里面进行裁剪  
