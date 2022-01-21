@@ -3,13 +3,13 @@
 https://www.jb51.net/article/144717.htm  
 https://github.com/shengge/android-crop 
 
-添加依赖
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+添加依赖  
+	allprojects {  
+		repositories {  
+			...  
+			maven { url 'https://jitpack.io' }  
+		}  
+	}  
   
 	dependencies {
 	        implementation 'com.github.Monsterily:cutphotos:1.0'
