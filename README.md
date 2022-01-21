@@ -14,7 +14,12 @@ https://github.com/shengge/android-crop
 	dependencies {
 	        implementation 'com.github.Monsterily:cutphotos:1.0'
 	}
-
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 打开相册选择图片  
 Crop.album(Activity activity)  
 在onActivityResult生命周期里面进行裁剪  
