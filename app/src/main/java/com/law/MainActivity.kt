@@ -12,9 +12,9 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.monsterily.cutphoto.crop.Crop.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 

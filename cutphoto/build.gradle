@@ -4,8 +4,6 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.github.Monsterily'
-
 android {
     compileSdk 31
 
