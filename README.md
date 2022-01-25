@@ -12,7 +12,7 @@ https://github.com/shengge/android-crop
 	}  
   
 	dependencies {
-	        implementation 'com.github.Monsterily:cutphotos:1.0'
+	        implementation 'com.github.Monsterily:cutphotos:6.0'
 	}  
 打开相册选择图片  
 Crop.album(Activity activity)  
