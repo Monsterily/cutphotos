@@ -4,8 +4,8 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Cutphoto">
+        android:supportsRtl="true">
+<!--        android:theme="@style/Theme.Cutphoto">-->
         <activity android:name="com.monsterily.cutphoto.crop.CircleCropImageActivity" />
         <activity android:name="com.monsterily.cutphoto.crop.CropImageActivity" />
         <provider
