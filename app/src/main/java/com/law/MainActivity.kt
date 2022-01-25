@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     //部分手机可能直接存放在bundle中
                     var bundleExtras = data?.getExtras()
                     if (bundleExtras != null) {
-                        imageUri = bundleExtras.getParcelable("data")
+                         imageUri = bundleExtras.getParcelable("data")
                     }
                 }
                 //将获得的图片uri进行压缩再裁剪，不然图片像素过大，可能会出现错误
