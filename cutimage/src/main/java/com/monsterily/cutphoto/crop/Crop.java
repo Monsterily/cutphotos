@@ -157,6 +157,9 @@ public class Crop {
         activity.startActivityForResult(getIntent(activity), REQUEST_CROP);
     }
 
+    public void start(Fragment fragment,Activity activity) {
+        fragment.startActivityForResult(getIntent(activity), REQUEST_CROP);
+    }
     /**
      * Send the crop Intent!
      *
@@ -246,6 +249,21 @@ public class Crop {
 
     }
 
+
+    /**
+     * imageUri 图片相册保存的路径
+     * file 文件路径
+     * outfile 输出文件路径
+     * shape 裁剪的形状
+     */
+    public static void Smallphoto(Fragment fragment,Activity activity, Uri imageUri, File file, File outfile, int shape, int requestCode) {
+        if (requestCode == REQUEST_CODE_PICK_IMAGE) {
+            copyFolder(fragment,activity, imageUri, file, outfile, shape);
+        } else {
+            luban(fragment,activity, file, outfile, shape);
+        }
+
+    }
     /**
      * luban压缩
      * file 文件路径
@@ -275,6 +293,35 @@ public class Crop {
                 }).launch();
     }
 
+    /**
+     * luban压缩
+     * file 文件路径
+     * outfile 输出文件路径
+     * shape 裁剪的形状
+     */
+    public static void luban(Fragment fragment,Activity activity, File file, File outfile, int shape) {
+        Luban.with(activity)
+                .load(file)
+                .ignoreBy(100)
+                .setTargetDir(file.getParent())
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        Crop.getInstance().input(Uri.fromFile(file)).output(Uri.fromFile(outfile)).asSquare().setShape(shape)
+                                .start(fragment,activity);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("鲁班压缩出错", "onError: " + e);
+                    }
+                }).launch();
+    }
+
     public static void copyFolder(Activity activity, Uri oldPath, File newPath, File outfile, int shape) {
         try {
             if (!newPath.exists()) {  //文件不存在时
@@ -291,6 +338,28 @@ public class Crop {
             oFile.close();
             iFile.close();
             luban(activity, newPath, outfile, shape);
+        } catch (Exception e) {
+            Log.d("测试", "copyFolder: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    public static void copyFolder(Fragment fragment,Activity activity, Uri oldPath, File newPath, File outfile, int shape) {
+        try {
+            if (!newPath.exists()) {  //文件不存在时
+                newPath.createNewFile();
+            }
+            InputStream iFile = activity.getContentResolver().openInputStream(oldPath);
+            OutputStream oFile = new FileOutputStream(newPath);
+            byte[] read = new byte[1024];
+            int len = 0;
+            while ((len = iFile.read(read)) != -1) {
+                oFile.write(read, 0, len);
+            }
+            oFile.flush();
+            oFile.close();
+            iFile.close();
+            luban(fragment,activity, newPath, outfile, shape);
         } catch (Exception e) {
             Log.d("测试", "copyFolder: " + e);
             e.printStackTrace();
