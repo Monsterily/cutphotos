@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
 
 import com.monsterily.cutphoto.R;
 
@@ -48,7 +49,8 @@ public class Crop {
     public static final int REQUEST_CODE_CAPTURE_CAMEIA = 1;//拍照
     public static final int REQUEST_CODE_CUT_CAMEIA = 2;//剪切;
     public static int SHAPE = 1;
-    public static Uri userImageUri=null;
+    public static Uri userImageUri = null;
+
     static interface Extra {
         String ASPECT_X = "aspect_x";
         String ASPECT_Y = "aspect_y";
@@ -235,21 +237,22 @@ public class Crop {
      * outfile 输出文件路径
      * shape 裁剪的形状
      */
-    public static void Smallphoto(Activity activity,Uri imageUri, File file, File outfile, int shape,int requestCode) {
-        if (requestCode==REQUEST_CODE_PICK_IMAGE){
-            copyFolder(activity,imageUri,file,outfile,shape);
-        }else {
-            luban(activity,file,outfile,shape);
+    public static void Smallphoto(Activity activity, Uri imageUri, File file, File outfile, int shape, int requestCode) {
+        if (requestCode == REQUEST_CODE_PICK_IMAGE) {
+            copyFolder(activity, imageUri, file, outfile, shape);
+        } else {
+            luban(activity, file, outfile, shape);
         }
 
     }
+
     /**
      * luban压缩
      * file 文件路径
      * outfile 输出文件路径
      * shape 裁剪的形状
      */
-    public static void luban(Activity activity,File file, File outfile, int shape) {
+    public static void luban(Activity activity, File file, File outfile, int shape) {
         Luban.with(activity)
                 .load(file)
                 .ignoreBy(100)
@@ -267,28 +270,29 @@ public class Crop {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("鲁班压缩出错", "onError: "+e);
+                        Log.d("鲁班压缩出错", "onError: " + e);
                     }
                 }).launch();
     }
-    public static void copyFolder(Activity activity,Uri oldPath, File newPath,File outfile, int shape) {
+
+    public static void copyFolder(Activity activity, Uri oldPath, File newPath, File outfile, int shape) {
         try {
             if (!newPath.exists()) {  //文件不存在时
-                    newPath.createNewFile();
-                }
+                newPath.createNewFile();
+            }
             InputStream iFile = activity.getContentResolver().openInputStream(oldPath);
-            OutputStream oFile =new FileOutputStream(newPath);
+            OutputStream oFile = new FileOutputStream(newPath);
             byte[] read = new byte[1024];
             int len = 0;
-            while ((len=iFile.read(read))!=-1) {
+            while ((len = iFile.read(read)) != -1) {
                 oFile.write(read, 0, len);
             }
             oFile.flush();
             oFile.close();
             iFile.close();
-            luban(activity,newPath,outfile,shape);
+            luban(activity, newPath, outfile, shape);
         } catch (Exception e) {
-            Log.d("测试", "copyFolder: "+e);
+            Log.d("测试", "copyFolder: " + e);
             e.printStackTrace();
         }
     }
@@ -344,7 +348,35 @@ public class Crop {
         }
     }
 
-    public static void camera(Activity activity,File file) {
+    //打开相册
+    public static void album(Fragment fragment, Activity activity) {
+        //进行权限的判断,查看是否拥有权限
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //权限还没有授予，进行申请
+            ActivityCompat.requestPermissions(
+                    activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    200
+            );//申请的requestcode为200
+        } else {
+            //如果权限已经申请过，直接进行图片选择
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            //判断系统中是否有处理该Intent的Activity
+            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                fragment.startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+            } else {
+                Toast.makeText(activity, "未找到图片查看器", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //打开相机
+    public static void camera(Activity activity, File file) {
         if (ContextCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.CAMERA
@@ -361,11 +393,33 @@ public class Crop {
             );//申请的requstCode为300
         } else {
             //权限已经申请
-            imageCapture(activity,file);
+            imageCapture(activity, file);
         }
     }
 
+    //打开相机
+    public static void camera(Fragment fragment,Activity activity, File file) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.CAMERA
+        ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //权限还没有授予，进行申请
+            ActivityCompat.requestPermissions(
+                    activity,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    300
+            );//申请的requstCode为300
+        } else {
+            //权限已经申请
+            imageCapture(fragment,activity, file);
+        }
+    }
     //跳转到拍照
+
     /**
      * pictureFile 存放头像的目录
      *
@@ -389,12 +443,46 @@ public class Crop {
                     "com.monsterily.common.cutphoto.crop", pictureFile
             );
         } else {
-            intent =new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             userImageUri = Uri.fromFile(pictureFile);
         }
         // 去拍照,拍照的结果存到pictureUri对应的路径中
         intent.putExtra(MediaStore.EXTRA_OUTPUT, userImageUri);
         activity.startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMEIA);
+    }
+
+
+    //跳转到拍照
+
+    /**
+     * pictureFile 存放头像的目录
+     *
+     * @param activity
+     * @param pictureFile
+     */
+    private static void imageCapture(Fragment fragment,Activity activity, File pictureFile) {
+        Intent intent;
+        if (!pictureFile.exists()) {
+            pictureFile.getParentFile().mkdir();
+        }
+        // 判断当前系统，android7.0以上版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            /*FileProvider是ContentProvider的一个子类，用于应用程序之间私有
+                文件的传递,需要在清单里配置，代码在下方。实际的getUriForFile就是
+       FileProvider.getUriForFile("上下文"，"清单文件中authorities的值"，"共享的文件")；*/
+            userImageUri = FileProvider.getUriForFile(
+                    activity,
+                    "com.monsterily.common.cutphoto.crop", pictureFile
+            );
+        } else {
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            userImageUri = Uri.fromFile(pictureFile);
+        }
+        // 去拍照,拍照的结果存到pictureUri对应的路径中
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, userImageUri);
+        fragment.startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMEIA);
     }
 
 }
