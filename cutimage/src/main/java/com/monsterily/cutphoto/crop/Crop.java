@@ -3,7 +3,6 @@ package com.monsterily.cutphoto.crop;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +23,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.monsterily.cutphoto.R;
@@ -398,7 +398,7 @@ public class Crop {
     }
 
     //打开相机
-    public static void camera(Fragment fragment,Activity activity, File file) {
+    public static void camera(Fragment fragment, Activity activity, File file) {
         if (ContextCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.CAMERA
