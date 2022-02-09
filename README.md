@@ -59,3 +59,7 @@ Crop.camera(Activity activity)
 特别提醒： 
 如果使用圆形裁剪，请调用方法将图片保存为圆形  
 Crop.getCircleBitmap（Bitmap bitmap）  
+
+
+
+如果有任何问题请联系我：1113179146@qq.com  
